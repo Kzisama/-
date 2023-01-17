@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      const obj = { name: "zs" };
+      // Object.definedProperty的基本使用
+      Object.defineProperty(obj, "age", {
+        value: 10,
+        writable: true, // 是否能被修改,默认为 false
+        enumerable: true, // 是否能被枚举,默认为 false
+        configurable: true, // 是否能被删除，默认为 false
+      });
+
+      // getter setter 的使用
+      // 注意：使用了getter setter 就不能有 value writable 属性
+      // 注意不要在getter中获取该属性的值，也不要在setter中再次设置该属性的值，会导致栈溢出
+      const obj1 = { name: "ls" };
+      let initVal = 18;
+      Object.defineProperty(obj1, "age", {
+        enumerable: true, // 是否能被枚举,默认为 false
+        configurable: true, // 是否能被删除，默认为 false
+        get: function () {
+          console.log("获取了age的值");
+          // return obj1.age;  // 会导致死循环
+          return initVal;
+        },
+        set: function (value) {
+          console.log("设置了age的值");
+          initVal = value;
+          // obj.age = value; // 也会导致死循环
+        },
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      class Vue {
+        constructor(options) {
+          this.$options = options;
+          // data 也可以是函数
+          this._data = options.data;
+          this.initData();
+        }
+        initData() {
+          const data = this._data;
+          const keys = Object.keys(data);
+          // 数据代理
+          for (let i = 0; i < keys.length; i++) {
+            Object.defineProperty(this, keys[i], {
+              enumerable: true,
+              configurable: true,
+              get: function proxyGetter() {
+                return data[keys[i]];
+              },
+              set: function proxySetter(value) {
+                data[keys[i]] = value;
+              },
+            });
+          }
+          // 数据劫持
+          for (let i = 0; i < keys.length; i++) {
+            let val = data[keys[i]];
+            Object.defineProperty(data, keys[i], {
+              enumerable: true,
+              configurable: true,
+              get: function reactiveGetter() {
+                console.log("获取值");
+                return val;
+              },
+              set: function reactiveSetter(value) {
+                console.log("设置值");
+                val = value;
+              },
+            });
+          }
+        }
+      }
+
+      const vm = new Vue({
+        data: {
+          name: "zs",
+          age: 19,
+        },
+      });
+    </script>
+  </body>
+</html>
