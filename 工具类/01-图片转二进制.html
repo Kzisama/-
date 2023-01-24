@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <input type="file" id="ipt" />
+    <img src="" alt="" id="img" width="200px" height="200px" />
+
+    <script>
+      const ipt = document.getElementById("ipt");
+      const img = document.getElementById("img");
+
+      const fn = e => {
+        let reader = new FileReader(); // FileReader 是一种异步读取文件机制
+        // readAsDataURL 将读取到的文件转成base64
+        reader.readAsDataURL(e.target.files[0]);
+        // .onload 读取成功时的回调
+        reader.onload = () => {
+          console.log(reader.result); // reader.result 就是转换成base64格式的图片
+          img.src = reader.result;
+        };
+      };
+
+      ipt.addEventListener("change", fn);
+    </script>
+  </body>
+</html>
