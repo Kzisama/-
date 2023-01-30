@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <input type="text" id="ipt" />
+
+    <script>
+      const ipt = document.querySelector("#ipt");
+
+      function debounce(fn, delay) {
+        let timer = null;
+        return function () {
+          clearTimeout(timer);
+          timer = setTimeout(fn, delay);
+        };
+      }
+
+      ipt.addEventListener(
+        "input",
+        debounce(() => {
+          console.log("执行了");
+        }, 1000),
+      );
+    </script>
+  </body>
+</html>

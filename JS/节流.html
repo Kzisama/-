@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      body {
+        height: 1000px;
+      }
+    </style>
+  </head>
+  <body>
+    <script>
+      function throttle(fn, delay) {
+        let flag = true; // true 可以通过节流阀
+        return function () {
+          if (flag) {
+            flag = false; // 关闭节流阀
+            setTimeout(() => {
+              fn();
+              flag = true; // 执行完后再打开
+            }, delay);
+          }
+        };
+      }
+
+      window.onscroll = throttle(() => {
+        console.log(123);
+      }, 1000);
+    </script>
+  </body>
+</html>
