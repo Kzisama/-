@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Document</title>
+	</head>
+	<body>
+		<script>
+			const obj = {
+				name: "张三",
+				age: 18,
+				roles: ["user", "admin", ["superadmin"]],
+				son: {
+					sonName: "李四",
+				},
+				sayHi() {
+					console.log("hello");
+				},
+			};
+
+			// 简易深拷贝--递归
+			function deepClone(obj) {
+				if (obj === null || typeof obj !== "object") {
+					return obj;
+				}
+				let target = {};
+				for (let key in obj) {
+					target[key] = deepClone(obj[key]);
+				}
+				return target;
+			}
+			// 简易深拷贝--递归
+			function deepClone2(obj) {
+				let target = null;
+				if (obj instanceof Array) {
+					target = [];
+					for (let key in obj) {
+						target[key] = deepClone2(obj[key]);
+					}
+				} else if (obj instanceof Object) {
+					target = {};
+					for (let key in obj) {
+						target[key] = deepClone2(obj[key]);
+					}
+				} else {
+					target = obj;
+				}
+				return target;
+			}
+
+			const newObj = deepClone2(obj);
+			obj.age = 99;
+			obj.roles[2][0] = "xxx";
+			obj.son.sonName = "王五";
+			console.log("newObj", newObj);
+
+			console.log("-------------------------------------");
+
+			// 循环引用
+			const obj1 = {
+				name: "小明",
+			};
+			const obj2 = {
+				name: "小红",
+				roles: ["user", ["admin"]],
+				son: obj1, // 引用obj1
+			};
+			obj1.mom = obj2; // 引用obj2
+
+			// mapObj 为一个map对象，存放着被标记的对象
+			function deepClone3(obj, mapObj) {
+				let target = null;
+				const map = mapObj ? mapObj : new Map(); // 没有传递mapObj则初始化一个
+				if (obj instanceof Array) {
+					target = [];
+					for (let key in obj) {
+						target[key] = deepClone3(obj[key]);
+					}
+				} else if (obj instanceof Object) {
+					target = {};
+					for (let key in obj) {
+						// 对象未被标记，可以进行deepClone
+						if (!map.has(obj[key])) {
+							map.set(obj[key], 1); // 给对象打标记，不可再进行deepClone
+							target[key] = deepClone3(obj[key], map);
+						}
+					}
+				} else {
+					target = obj;
+				}
+				return target;
+			}
+
+			const objj = deepClone3(obj2); // 造成死循环
+			obj2.roles[1][0] = "adasdasdads";
+			console.log(obj2, objj);
+		</script>
+	</body>
+</html>
